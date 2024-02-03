@@ -38,7 +38,7 @@ jobs:
           name: production-files
           path: ./build
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@main
+        uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
           github_token: ${{ secrets.GH_ACCESS_TOKEN }}
           publish_dir: ./build
