@@ -1,3 +1,50 @@
+# name: CI/CD Pipeline
+
+# on:
+#   push:
+#     branches:
+#       - main
+
+# jobs:
+#   # Build Job
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout Repository
+#         uses: actions/checkout@v2
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: 18.x
+#       - name: Install Dependencies
+#         run: npm install
+#       - name: Build
+#         run: npm run build
+#       - name: Upload artifact to enable deployment
+#         uses: actions/upload-artifact@v3
+#         with:
+#           name: production-files
+#           path: ./build
+
+#   # Deploy Job
+#   deploy:
+#     # Add a dependency to the build job
+#     needs: build
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Download artifact
+#         uses: actions/download-artifact@v3
+#         with:
+#           name: production-files
+#           path: ./build
+#       - name: Deploy to GitHub Pages
+#         uses: JamesIves/github-pages-deploy-action@releases/v3
+#         with:
+#           ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
+#            BRANCH: main
+#          FOLDER: ./build
+
+
 name: CI/CD Pipeline
 
 on:
@@ -6,40 +53,32 @@ on:
       - main
 
 jobs:
-  # Build Job
   build:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18.x
-      - name: Install Dependencies
-        run: npm install
-      - name: Build
-        run: npm run build
-      - name: Upload artifact to enable deployment
-        uses: actions/upload-artifact@v3
-        with:
-          name: production-files
-          path: ./build
 
-  # Deploy Job
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 14
+
+    - name: Install Dependencies
+      run: npm install
+
+    - name: Build
+      run: npm run build
+
   deploy:
-    # Add a dependency to the build job
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: production-files
-          path: ./build
       - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@releases/v3
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
-           BRANCH: main
-         FOLDER: ./build
+          BRANCH: gh-pages
+          FOLDER: ./build
+
