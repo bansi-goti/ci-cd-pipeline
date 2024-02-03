@@ -21,7 +21,7 @@ jobs:
     - name: Install Dependencies
       run: npm install
 
-    - name: Build
+    - name: build
       run: npm run build
 
   deploy:
@@ -32,4 +32,4 @@ jobs:
       uses: JamesIves/github-pages-deploy-action@4.2.0
       with:
         branch: gh-pages
-        folder: build
+        folder: ./build
